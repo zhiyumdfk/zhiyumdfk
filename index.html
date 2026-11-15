@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>支語糾正器｜輸入詞彙，立刻抓出支語並換成台灣說法</title>
+<meta name="description" content="免費線上支語檢查工具。輸入詞彙或整句話，即時標出支語（中國用語）並提供台灣正體中文說法，收錄 400 多個常見詞，支援簡體輸入。">
+<meta name="keywords" content="支語,支語檢查,支語糾正,台灣用語,中國用語,兩岸用語對照,侵略性詞彙,台灣說法">
+<meta property="og:title" content="支語糾正器">
+<meta property="og:description" content="輸入一句話，抓出支語，換成台灣說法。本站拒收視頻，只收影片。">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#FAF6EE">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAF6EE;--ink:#141414;--soft:#6E6A62;--line:#141414;
+  --red:#E8412C;--blue:#2F5BFF;--green:#14A05A;--pink:#FF8DC3;--yellow:#FFD02E;
+  --redbg:#FFE3DD;--greenbg:#DDF5E7;--yellowbg:#FFF2BF;--pinkbg:#FFE4F1;--bluebg:#E1E8FF;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.65;overflow-x:hidden}
+.stripes{display:flex;height:10px}
+.stripes i{flex:1}
+.stripes i:nth-child(1){background:var(--red)}.stripes i:nth-child(2){background:var(--yellow)}.stripes i:nth-child(3){background:var(--green)}.stripes i:nth-child(4){background:var(--blue)}.stripes i:nth-child(5){background:var(--pink)}
+.wrap{max-width:720px;margin:0 auto;padding:28px 20px 40px;position:relative}
+
+/* header */
+header{position:relative;padding:18px 0 26px}
+.kicker{font-size:12px;letter-spacing:.32em;color:var(--soft);font-weight:500;max-width:calc(100% - 140px)}
+@media (max-width:520px){.kicker{letter-spacing:.2em;font-size:11px;max-width:calc(100% - 100px)}}
+h1{margin:6px 0 0;font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(52px,14vw,96px);line-height:1;letter-spacing:-.02em}
+h1 .zy{position:relative;display:inline-block}
+h1 .zy::after{content:"";position:absolute;left:-4%;right:-4%;top:52%;height:.11em;background:var(--red);transform:rotate(-6deg)}
+h1 .fix{color:var(--blue)}
+.tag{margin:14px 0 0;font-size:15px;color:var(--soft);max-width:30em}
+.tag b{color:var(--ink);font-weight:700;background:linear-gradient(transparent 60%,var(--yellow) 60%)}
+.sticker{position:absolute;right:0;top:12px;width:112px;height:112px;border-radius:50%;background:var(--pink);display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;font-size:14px;line-height:1.25;transform:rotate(12deg);border:2px solid var(--ink)}
+.sticker span{display:block;font-size:11px;font-weight:500;margin-top:2px}
+.dot{position:absolute;border-radius:50%}
+.d1{width:18px;height:18px;background:var(--green);right:128px;top:4px}
+.d2{width:10px;height:10px;background:var(--blue);right:96px;top:126px}
+@media (max-width:520px){.sticker{width:88px;height:88px;font-size:12px;top:0;right:-6px}.sticker span{font-size:10px}.d1{right:90px}.d2{right:70px;top:96px}}
+
+/* tabs */
+.tabs{display:flex;border:2px solid var(--ink);margin:6px 0 22px;background:#fff}
+.tab{flex:1;border:0;background:transparent;padding:11px 8px;font:inherit;font-size:15px;font-weight:700;color:var(--ink);cursor:pointer;position:relative}
+.tab+.tab{border-left:2px solid var(--ink)}
+.tab.on{background:var(--ink);color:var(--paper)}
+.tab small{font-weight:400;opacity:.7;margin-left:4px;font-size:12px}
+
+/* input */
+.field{position:relative}
+textarea,input[type=search]{width:100%;font:inherit;font-size:18px;padding:16px 18px;border:2px solid var(--ink);border-radius:0;background:#fff;color:var(--ink);outline:none;box-shadow:6px 6px 0 var(--blue);transition:box-shadow .15s,transform .15s;-webkit-appearance:none}
+textarea{min-height:120px;resize:vertical}
+textarea:focus,input[type=search]:focus{box-shadow:8px 8px 0 var(--pink);transform:translate(-2px,-2px)}
+textarea::placeholder,input::placeholder{color:#A9A398}
+.row{display:flex;gap:10px;margin:18px 0 0;flex-wrap:wrap}
+.btn{font:inherit;font-size:14px;font-weight:700;border:2px solid var(--ink);background:#fff;color:var(--ink);padding:8px 16px;cursor:pointer;transition:transform .1s,box-shadow .1s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.btn:active{transform:none;box-shadow:none}
+.btn.y{background:var(--yellow)}
+.btn.done{background:var(--green);color:#fff}
+
+/* results */
+.status{margin:30px 0 14px;font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(24px,6vw,32px);line-height:1.25}
+.status small{display:block;font-family:"Noto Sans TC",sans-serif;font-weight:400;font-size:14px;color:var(--soft);margin-top:6px}
+.c-red{color:var(--red)}.c-green{color:var(--green)}.c-blue{color:var(--blue)}
+.c-yellow{background:linear-gradient(transparent 55%,var(--yellow) 55%)}
+.box{border:2px solid var(--ink);background:#fff;padding:16px 18px;font-size:18px;word-break:break-word;margin-bottom:16px}
+mark{background:var(--redbg);color:var(--red);font-weight:700;padding:0 2px;text-decoration:line-through;text-decoration-thickness:2px}
+mark.g{background:var(--yellowbg);color:#8A6400;text-decoration:none;border-bottom:2px dashed #8A6400}
+.fixed{position:relative;background:var(--greenbg);border-color:var(--green)}
+.fixed b{color:var(--green);font-weight:900}
+.stamp{position:absolute;right:-8px;top:-18px;border:2px solid var(--red);color:var(--red);font-weight:900;font-size:13px;letter-spacing:.2em;padding:2px 10px 2px 12px;background:var(--paper);transform:rotate(7deg)}
+.label{font-size:12px;letter-spacing:.3em;color:var(--soft);margin:26px 0 10px;font-weight:500}
+
+.cards{display:grid;gap:12px}
+.card{border:2px solid var(--ink);background:#fff;padding:14px 16px 14px 20px;position:relative}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--red)}
+.card.g::before{background:var(--yellow)}
+.top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.term{font-size:20px;font-weight:900;position:relative;color:var(--ink)}
+.term::after{content:"";position:absolute;left:-2px;right:-2px;top:55%;height:3px;background:var(--red);transform:rotate(-4deg)}
+.card.g .term::after{background:var(--yellow);height:4px}
+.arrow{font-weight:900;color:var(--blue)}
+.tw{font-size:20px;font-weight:900;color:var(--green)}
+.tags{margin-left:auto;display:flex;gap:6px}
+.badge{font-size:11px;font-weight:700;padding:2px 8px;border:1.5px solid var(--ink);background:var(--red);color:#fff;white-space:nowrap}
+.badge.g{background:var(--yellow);color:var(--ink)}
+.badge.c{background:transparent;color:var(--ink);font-weight:500}
+.note{color:var(--soft);font-size:14px;margin-top:6px}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:13px;border:1.5px solid var(--ink);background:#fff;padding:4px 12px;cursor:pointer;color:var(--ink)}
+.chip:nth-child(5n+1):hover,.chip.on:nth-child(5n+1){background:var(--red);color:#fff}
+.chip:nth-child(5n+2):hover,.chip.on:nth-child(5n+2){background:var(--yellow)}
+.chip:nth-child(5n+3):hover,.chip.on:nth-child(5n+3){background:var(--green);color:#fff}
+.chip:nth-child(5n+4):hover,.chip.on:nth-child(5n+4){background:var(--blue);color:#fff}
+.chip:nth-child(5n+5):hover,.chip.on:nth-child(5n+5){background:var(--pink)}
+
+.empty{margin-top:34px;padding:22px 0;border-top:2px solid var(--ink);display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.shapes{display:flex;gap:6px}
+.shapes i{width:22px;height:22px;display:block}
+.shapes i:nth-child(1){background:var(--red);border-radius:50%}
+.shapes i:nth-child(2){background:var(--yellow);transform:rotate(45deg)}
+.shapes i:nth-child(3){background:var(--blue)}
+.empty p{margin:0;font-size:14px;color:var(--soft)}
+.empty p b{color:var(--ink)}
+
+.count{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;margin:22px 0 12px}
+.count span{color:var(--red)}
+.hide{display:none!important}
+
+details{margin-top:46px;border-top:2px solid var(--ink);padding-top:16px;font-size:14px}
+summary{cursor:pointer;font-weight:700;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"  展開";color:var(--blue);font-weight:500}
+details[open] summary::after{content:"  收起"}
+details p{color:var(--soft);margin:12px 0 0}
+details b{color:var(--ink)}
+footer{margin-top:36px;padding-top:18px;border-top:2px solid var(--ink);font-size:12px;color:var(--soft)}
+footer .joke{font-family:"Noto Serif TC",serif;font-weight:900;font-size:16px;color:var(--ink);margin-bottom:8px}
+footer a{color:var(--blue)}
+.pop{animation:pop .25s ease-out}
+@keyframes pop{from{transform:translateY(6px);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.pop{animation:none}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="stripes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+<div class="wrap">
+  <header>
+    <div class="kicker">TAIWAN VOCABULARY CHECKPOINT</div>
+    <h1><span class="zy">支語</span><br><span class="fix">糾正器</span></h1>
+    <p class="tag">你剛剛說的那句話，<b>真的是在台灣長大的嗎？</b>貼上來，我們幫你查身分。</p>
+    <div class="sticker" aria-hidden="true"><div>本站拒收<br>視頻<span>只收影片</span></div></div>
+    <i class="dot d1" aria-hidden="true"></i><i class="dot d2" aria-hidden="true"></i>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab on" data-v="check">臨檢現場</button>
+    <button class="tab" data-v="dict">通緝名單<small id="tabn"></small></button>
+  </nav>
+
+  <main>
+  <section id="v-check">
+    <div class="field"><textarea id="inp" aria-label="輸入詞彙或句子" placeholder="把可疑的句子交出來。&#10;例：這個視頻的質量很高，我立馬點贊了"></textarea></div>
+    <div class="row">
+      <button class="btn y" id="copyBtn">複製乾淨版本</button>
+      <button class="btn" id="clearBtn">當作沒說過</button>
+    </div>
+    <div id="out" aria-live="polite"></div>
+    <div id="histWrap" class="hide"><div class="label">最近被你臨檢過</div><div class="chips" id="hist"></div></div>
+    <div id="tryWrap"><div class="label">隨便抓幾個嫌疑人</div><div class="chips" id="try"></div></div>
+  </section>
+
+  <section id="v-dict" class="hide">
+    <input type="search" id="q" aria-label="搜尋字典" placeholder="搜尋支語或台灣說法，例：影片、软件">
+    <div class="label">按罪名分類</div>
+    <div class="chips" id="cats"></div>
+    <div class="count" id="dcount"></div>
+    <div class="cards" id="dlist"></div>
+  </section>
+  </main>
+
+  <details>
+    <summary>我們憑什麼這樣判</summary>
+    <p><b>紅色是支語</b>：台灣有固定且主流的說法，這個詞主要來自中國用法。<br>
+    <b>黃色是看語境</b>：台灣也會用，但某些意思是中國用法。例如「水平」當「水準」、「程序」當軟體的「程式」。「水平線」「行政程序」這種台灣本來就這樣說的搭配，系統會自動放行。<br>
+    <b>判斷看脈絡</b>：即使台灣辭典有收錄，用法不對還是支語。<br>
+    <b>主權用語一律紅色</b>：例如「中國台灣」、「台灣地區」。</p>
+  </details>
+
+  <footer>
+    <div class="joke">本站不含任何視頻、屏幕或質量問題，也沒有優化空間。</div>
+    資料參考 <a href="https://invade.tw/vocabs" target="_blank" rel="noopener">中國侵略資料庫 invade.tw</a>（CC0）與常見用語整理。判斷僅供參考，最後要怎麼說，還是你自己決定。
+  </footer>
+</div>
+
+<script>
+const RAW = `中國台灣|台灣|s|主權|侵害台灣主權的稱法
+台灣地區|台灣|s|主權|暗喻台灣不是國家
+台灣省|台灣|s|主權|中共對台灣的矮化稱法
+大陸|中國|g|主權|台灣稱對岸用「中國」較中性，「大陸」隱含一中框架|大陸型,大陸性,大陸棚,新大陸,歐亞大陸,大陸地區人民
+內地|中國|s|主權|中國對港澳台以外地區的稱法
+祖國|中國（依語境）|s|主權|中共宣傳用語
+台胞|台灣人|s|主權|中國對台灣人的稱法
+兩會|中國人大與政協會議|g|主權|中國政治用語
+普通話|華語、國語|s|語言|中國標準語的稱法
+領導人|總統|g|主權|中國常以「領導人」代稱台灣總統
+領導|主管、長官|g|職場|名詞「上司」義為中國用法；動詞「領導團隊」在台灣通用|領導力,領導者,領導能力,領導團隊
+質量|品質|g|名詞|台灣只在物理學用「質量」(mass)|質量守恆,質量數
+水平|水準|g|名詞|台灣「水平」指水平方向|水平線,水平面,水平儀,水平方向,水平移動,水平對齊,水平軸
+視頻|影片|s|科技
+短視頻|短影音|s|科技
+音頻|音訊、音檔|s|科技
+屏幕|螢幕|s|科技
+顯示屏|螢幕|s|科技
+觸屏|觸控螢幕|s|科技
+截屏|截圖|s|科技
+錄屏|螢幕錄影|s|科技
+鏈接|連結|s|科技
+登錄|登入|s|科技|台灣「登錄」指登記資料|登錄資料,登錄成績
+賬號|帳號|s|科技
+賬戶|帳戶|s|科技
+激活|啟用、開通|s|科技
+卸載|解除安裝、移除|s|科技
+刷新|重新整理|s|科技
+菜單|選單|s|科技
+文件夾|資料夾|s|科技
+文檔|文件|s|科技
+設置|設定|s|科技
+配置|設定、規格|g|科技
+默認|預設|s|科技
+服務器|伺服器|s|科技
+數據庫|資料庫|s|科技
+數據|資料、數據|g|科技|資訊領域台灣慣用「資料」(data)
+信息|資訊、訊息|s|科技
+網絡|網路|g|科技|台灣「網絡」多用於人際網絡|人際網絡,社會網絡,神經網絡
+互聯網|網際網路、網路|s|科技
+寬帶|寬頻|s|科技
+軟件|軟體|s|科技
+硬件|硬體|s|科技
+內存|記憶體|s|科技
+硬盤|硬碟|s|科技
+U盤|隨身碟|s|科技
+優盤|隨身碟|s|科技
+鼠標|滑鼠|s|科技
+光標|游標|s|科技
+窗口|視窗|g|科技|「服務窗口」在台灣通用|服務窗口,單一窗口,窗口期
+圖標|圖示、icon|s|科技
+插件|外掛、擴充功能|s|科技
+組件|元件|s|科技
+控件|控制項|s|科技
+程序|程式|g|科技|台灣「程序」指流程/procedure，軟體叫「程式」|程序正義,行政程序,法律程序,作業程序,標準程序,審查程序
+代碼|程式碼|s|科技
+編程|寫程式、程式設計|s|科技
+調用|呼叫|s|科技
+函數|函式|g|科技|數學上台灣也用「函數」|三角函數,函數圖形
+變量|變數|s|科技
+字符串|字串|s|科技
+線程|執行緒|s|科技
+進程|行程、處理程序|g|科技|一般「進程」(過程)台灣也用
+緩存|快取|s|科技
+存儲|儲存|s|科技
+內置|內建|s|科技
+自帶|內建|s|科技
+運行|執行、運作|g|科技
+兼容|相容|s|科技
+適配|相容、支援|s|科技
+集成|整合|s|科技
+接口|介面、接頭|s|科技
+芯片|晶片|s|科技
+智能|智慧|s|科技
+人工智能|人工智慧|s|科技
+激光|雷射|s|科技
+數碼|數位|s|科技
+數字化|數位化|s|科技
+分辨率|解析度|s|科技
+攝像頭|鏡頭、網路攝影機|s|科技
+攝像機|攝影機|s|科技
+錄像|錄影|s|科技
+二維碼|QR code|s|科技
+掃碼|掃 QR code|s|科技
+充電寶|行動電源|s|科技
+筆記本電腦|筆電|s|科技
+台式機|桌機|s|科技
+打印機|印表機|s|科技
+打印|列印|s|科技
+過渡|轉場|g|科技|影片「過渡特效」台灣說「轉場」|過渡期,過渡時期,過渡政府
+屏蔽|封鎖、隱藏|s|動詞|台灣通常只用於專業術語，如「輻射屏蔽」|輻射屏蔽,電磁屏蔽
+搜索|搜尋|s|網路
+博客|部落格|s|網路
+博主|部落客、網紅|s|網路
+UP主|YouTuber、創作者|s|網路
+帖子|貼文、文章|s|網路
+發帖|發文|s|網路
+點贊|按讚|s|網路
+點讚|按讚|s|網路
+點擊|點選、點擊|g|網路
+關注|追蹤|g|網路|「追蹤帳號」義為中國用法；「關注議題」台灣通用|關注議題,值得關注,高度關注,持續關注
+轉發|轉貼、分享|g|網路
+評論|留言|g|網路|網路「留言區」台灣說留言；「時事評論」通用|時事評論,社論評論,評論家
+社交媒體|社群媒體|s|網路
+熱搜|熱門話題|s|網路
+官宣|正式宣布|s|網路
+出圈|爆紅|s|網路
+破圈|爆紅、打破同溫層|s|網路
+頂流|當紅藝人|s|網路
+流量明星|人氣藝人|s|網路
+人設|形象|s|網路
+塌房|形象崩壞|s|網路
+種草|被推坑|s|網路
+拔草|退坑、打消念頭|s|網路
+安利|推坑、推薦|g|網路|台灣網路也常用，但源自中國
+帶貨|推銷、業配|s|網路
+直播帶貨|直播銷售|s|網路
+包郵|免運|s|網路
+差評|負評|s|網路
+性價比|CP值|s|網路
+吃瓜|看熱鬧、看八卦|s|俚語
+吃瓜群眾|圍觀路人|s|俚語
+yyds|超神、永遠的神|s|俚語
+YYDS|超神、永遠的神|s|俚語
+絕絕子|超讚|s|俚語
+破防|崩潰、心態崩了|s|俚語
+拉胯|很爛、拖後腿|s|俚語
+下頭|倒胃口、扣分|s|俚語
+上頭|著迷|g|俚語
+內卷|過度競爭、內鬥|s|俚語
+躺平|擺爛、佛系|g|俚語
+情緒價值|關愛、反應、觸動人心|s|名詞|源自中國行銷術語
+放飛自我|隨心所欲、不受拘束|s|俚語
+炸魚|虐菜、欺負新手|s|遊戲
+套娃|巢狀、模仿|s|動詞
+誤區|迷思、錯誤觀念、盲點|s|名詞
+SB|白痴|s|髒話
+傻逼|白痴|s|髒話
+牛逼|厲害|s|俚語
+牛B|厲害|s|俚語
+給力|很棒、很猛|s|俚語
+靠譜|可靠|s|俚語
+走心|用心|s|俚語
+顏值|外貌、長相|s|俚語
+高大上|高級|s|俚語
+接地氣|親民|s|俚語
+懵逼|傻眼|s|俚語
+忽悠|唬弄|s|俚語
+嘚瑟|臭屁|s|俚語
+摳門|小氣|s|俚語
+老鐵|好兄弟|s|俚語
+小姐姐|年輕女生、正妹|s|俚語
+小哥哥|帥哥|s|俚語
+小伙伴|夥伴、朋友|s|俚語
+閨蜜|好姊妹、閨密|g|俚語
+沒毛病|沒問題|s|俚語
+立馬|馬上|s|口語
+貌似|好像|s|口語
+咋|怎麼|s|口語
+早上好|早安|s|口語
+晚上好|晚安、你好|s|口語
+硬核|硬派、專業|g|俚語
+碰瓷|假車禍、硬凹|s|俚語
+打工人|上班族|s|俚語
+賦能|強化、協助|s|職場
+抓手|切入點、方法|s|職場
+閉環|完整流程|s|職場
+顆粒度|細節程度|s|職場
+落地|實施、實行|g|職場|「飛機落地」通用|飛機落地,落地窗,落地簽
+對標|對比、看齊|s|職場
+賽道|領域|s|職場
+調研|調查、市調|s|職場
+渠道|管道、通路|g|職場
+運營|營運|s|職場
+營銷|行銷|s|職場
+反饋|回饋|s|職場
+項目|專案|g|職場|「運動項目」「檢查項目」台灣通用|運動項目,比賽項目,檢查項目,項目一,項目二
+崗位|職位|s|職場
+上崗|上班、就職|s|職場
+下崗|失業|s|職場
+單位|公司、機關|g|職場|計量「單位」通用|計量單位,單位換算,主辦單位,協辦單位,公家單位,承辦單位
+用戶|使用者|g|職場
+投訴|客訴、申訴|s|生活
+充值|儲值|s|生活
+支付|付款|g|生活
+移動支付|行動支付|s|生活
+外賣|外送|s|生活
+快遞|宅配、包裹|g|生活
+公交車|公車|s|交通
+公交|公車|s|交通
+出租車|計程車|s|交通
+打車|叫車、坐計程車|s|交通
+地鐵|捷運|g|交通|國外的 Subway 可說地鐵
+自行車|腳踏車|g|交通
+摩托車|機車|g|交通
+衛生間|廁所、洗手間|s|生活
+空調|冷氣|g|生活
+小區|社區|s|生活
+物業|管委會、物業管理|g|生活
+酸奶|優格|s|食物
+土豆|馬鈴薯|s|食物
+西紅柿|番茄|s|食物
+三文魚|鮭魚|s|食物
+方便麵|泡麵|s|食物
+盒飯|便當|s|食物
+菠蘿|鳳梨|g|食物|「菠蘿麵包」台灣通用|菠蘿麵包,菠蘿包
+話筒|麥克風|s|影音
+音箱|喇叭、音響|s|影音
+調音台|混音器、Mixer|s|影音
+耳麥|耳機麥克風|s|影音
+後期|後製|g|影音|「後期」指時期時通用|後期階段,後期印象派
+科普|科學知識介紹、解說|g|名詞|原指科學普及，中國常用於非科學語境
+對象|另一半、交往對象|g|生活|「研究對象」等通用|研究對象,調查對象,服務對象,適用對象
+中國台北|台北|s|主權|將台灣矮化為中國一部分的稱法
+台灣同胞|台灣人|s|主權|中國對台灣人的統戰稱法
+台灣當局|台灣政府|s|主權|中國刻意避稱台灣政府
+台灣領導人|台灣總統|s|主權|中國刻意避稱總統
+地區領導人|總統|s|主權|矮化台灣元首的稱法
+島內|台灣國內|s|主權|中國媒體對台灣的稱法
+港澳台|港澳與台灣|g|主權|把台灣與港澳並列，隱含一中框架
+大陸地區|中國|g|主權
+黑客|駭客|s|科技
+軟文|業配文|s|網路
+殺毒軟件|防毒軟體|s|科技
+殺毒|掃毒|s|科技
+補丁|修補程式|s|科技
+宕機|當機|s|科技
+死機|當機|s|科技
+卡頓|卡、延遲|s|科技
+帶寬|頻寬|s|科技
+局域網|區域網路|s|科技
+調試|除錯|s|科技
+源代碼|原始碼|s|科技
+算法|演算法|s|科技
+數組|陣列|s|科技
+鏈表|鏈結串列|s|科技
+遞歸|遞迴|s|科技
+異步|非同步|s|科技
+回調|回呼|s|科技
+返回值|回傳值|s|科技
+運算符|運算子|s|科技
+註釋|註解|s|科技
+交互|互動|s|科技
+用戶體驗|使用者體驗|s|科技
+界面|介面|s|科技
+彈窗|彈出視窗|s|科技
+文本|文字|s|科技
+文本框|文字方塊|s|科技
+字號|字級、字體大小|s|科技
+粘貼|貼上|s|科技
+剪切|剪下|s|科技
+撤銷|復原|g|科技|法律上「撤銷」台灣通用|撤銷登記,撤銷處分,撤銷判決
+快捷鍵|快速鍵|s|科技
+全屏|全螢幕|s|科技
+分屏|分割畫面|s|科技
+壁紙|桌布|s|科技
+應用商店|App 商店|s|科技
+雲盤|雲端硬碟|s|科技
+網盤|雲端硬碟|s|科技
+在線|線上|s|科技
+實時|即時|s|科技
+視頻通話|視訊通話|s|科技
+視頻會議|視訊會議|s|科技
+屏保|螢幕保護程式|s|科技
+移動硬盤|外接硬碟|s|科技
+固態硬盤|固態硬碟|s|科技
+顯卡|顯示卡|s|科技
+主板|主機板|s|科技
+聲卡|音效卡|s|科技
+網卡|網路卡|s|科技
+內存條|記憶體|s|科技
+信號|訊號|s|科技
+短信|簡訊|s|科技
+手機號|手機號碼|s|科技
+座機|市話|s|科技
+運營商|電信業者|s|科技
+套餐|資費方案|g|科技|餐點「套餐」台灣通用|超值套餐,兒童套餐,午間套餐
+流量|行動數據|g|科技|網站流量、車流量台灣通用|車流量,人流量,網站流量,流量密碼
+數據線|傳輸線|s|科技
+公眾號|官方帳號、粉專|s|網路
+朋友圈|動態|s|網路
+群聊|群組|s|網路
+私信|私訊|s|網路
+表情包|梗圖、貼圖|s|網路
+段子|笑話、梗|s|網路
+網民|網友|s|網路
+黑粉|酸民|s|網路
+噴子|酸民|s|網路
+槓精|愛抬槓的人|s|網路
+鍵盤俠|鍵盤柯南、鍵盤戰士|s|網路
+水軍|網軍|s|網路
+甩鍋|推卸責任|s|俚語
+背鍋|揹黑鍋|s|俚語
+杠杠的|很棒|s|俚語
+撕逼|互撕、吵架|s|俚語
+社死|丟臉、社會性死亡|s|俚語
+凡爾賽|炫耀|s|俚語
+打call|應援|s|網路
+打卡|朝聖|g|網路|「上班打卡」台灣通用；「網紅景點打卡」較偏中國用法|上班打卡,下班打卡,打卡鐘
+標題黨|標題殺人|s|網路
+爆款|熱銷款|s|網路
+安排上|安排|s|俚語
+整活|搞事、表演|s|俚語
+搞事情|搞事|s|俚語
+扎心|戳心、心痛|s|俚語
+心塞|心累、鬱悶|s|俚語
+鬧心|心煩|s|俚語
+糟心|煩人|s|俚語
+窩心|委屈（中國義）|g|俚語|台灣「窩心」指貼心溫暖；中國指委屈難受，意思相反
+哪兒|哪裡|s|口語
+這兒|這裡|s|口語
+那兒|那裡|s|口語
+一塊兒|一起|s|口語
+倍兒|超、很|s|口語
+甭|不用|s|口語
+咋辦|怎麼辦|s|口語
+咋樣|怎麼樣|s|口語
+溜達|散步、逛逛|s|口語
+磨嘰|拖拖拉拉|s|口語
+嘮嗑|聊天|s|口語
+侃大山|閒聊|s|口語
+犯困|想睡|s|口語
+大佬|大神、高手|s|網路
+大V|網紅|s|網路
+學渣|成績差的人|s|俚語
+考研|考研究所|s|教育
+本科生|大學生|s|教育
+本科|大學|g|教育
+高考|大學入學考試、學測|s|教育
+中考|會考|s|教育
+卷子|考卷|s|教育
+博導|指導教授|s|教育
+畢設|畢業專題|s|教育
+簡歷|履歷|s|職場
+入職|到職|s|職場
+甲方|業主、客戶|g|職場
+乙方|廠商|g|職場
+匯報|報告|s|職場
+對接|接洽、聯繫|s|職場
+跟進|追蹤、後續處理|g|職場
+復盤|檢討|s|職場
+拉通|串聯|s|職場
+痛點|問題點|g|職場
+底層邏輯|基本原理|s|職場
+頂層設計|整體規劃|s|職場
+組合拳|一系列措施|s|職場
+一攬子|一系列、整套|s|職場
+牽頭|帶頭、主導|s|職場
+給到|給|s|職場
+宣發|宣傳|s|職場
+策劃|企劃|s|職場
+策劃案|企劃案|s|職場
+美工|美術設計|g|職場
+自媒體|個人媒體、創作者|g|網路
+西蘭花|花椰菜|s|食物
+圓白菜|高麗菜|s|食物
+卷心菜|高麗菜|s|食物
+獼猴桃|奇異果|s|食物
+牛油果|酪梨|s|食物
+車厘子|櫻桃|s|食物
+芝士|起司|s|食物
+冰激凌|冰淇淋|s|食物
+曲奇|餅乾|s|食物
+薯片|洋芋片|s|食物
+點外賣|叫外送|s|生活
+堂食|內用|s|生活
+打包|外帶|g|生活|「打包行李」台灣通用|打包行李,打包好,打包帶走
+買單|結帳|s|生活
+埋單|結帳|s|生活
+服務員|服務生|s|生活
+營業員|店員|s|生活
+收銀台|櫃檯、結帳台|s|生活
+便利店|便利商店|s|生活
+酒店|飯店|g|生活
+賓館|旅館|s|生活
+景區|景點、風景區|s|生活
+動車|火車|s|交通
+站台|月台|s|交通
+登機牌|登機證|s|交通
+航站樓|航廈|s|交通
+駕駛證|駕照|s|交通
+社保|勞健保|s|生活
+醫保|健保|s|生活
+輸液|打點滴|s|生活
+吊瓶|點滴|s|生活
+圓珠筆|原子筆|s|生活
+塑料袋|塑膠袋|s|生活
+塑料|塑膠|s|生活
+硅膠|矽膠|s|生活
+電飯煲|電鍋|s|生活
+冰櫃|冷凍櫃|s|生活
+煤氣|瓦斯|s|生活
+台球|撞球|s|娛樂
+真人秀|實境秀|s|娛樂
+番劇|動畫|s|娛樂
+劇透|暴雷|s|娛樂
+硬照|宣傳照|s|娛樂
+愛豆|偶像|s|娛樂
+飯圈|粉絲圈|s|娛樂
+打榜|衝榜|s|娛樂
+電視劇|連續劇、影集|g|娛樂
+開黑|組隊|s|遊戲
+上分|衝分|s|遊戲
+菜雞|菜鳥|s|遊戲
+氪金|課金|s|遊戲
+白嫖|免費仔、白吃白喝|s|遊戲
+開掛|開外掛|s|遊戲
+小號|分身帳號|g|遊戲|樂器「小號」台灣通用|吹小號
+錄音棚|錄音室|s|影音
+音響師|音控師|g|影音
+分鏡頭腳本|分鏡腳本|s|影音
+服化道|服裝、化妝、道具|s|影音
+幀率|影格率、FPS|s|影音
+幀|格、影格|s|影音
+碼率|位元率|s|影音
+高清|高畫質|s|影音
+超清|超高畫質|s|影音
+投屏|投影、螢幕鏡像|s|影音
+投影儀|投影機|s|影音
+揚聲器|喇叭|g|影音
+低音炮|重低音喇叭|s|影音
+功放|擴大機|s|影音
+渲染|算圖、彩現|g|影音|形容「渲染氣氛」台灣通用|渲染氣氛,誇大渲染`;
+const DICT = RAW.trim().split("\n").map(l=>{const [t,tw,lv,cat,note,ex]=l.split("|");return {t,tw:tw.split("、"),lv,cat,note:note||"",ex:(ex||"").split(",").filter(Boolean)}}).sort((a,b)=>b.t.length-a.t.length);
+const TWSET = new Map(); DICT.forEach(e=>e.tw.forEach(w=>{const k=w.replace(/（.*?）/g,"").trim(); if(!TWSET.has(k)) TWSET.set(k,e);}));
+const S2T_PAIRS="视視频頻质質链鏈录錄账賬户戶设設认認务務据據库庫网網络絡联聯软軟盘盤内內标標图圖组組码碼编編调調数數变變线線进進缓緩储儲适適摄攝头頭维維扫掃电電宝寶笔筆记記机機过過发發点點赞讚击擊关關转轉评評论論体體热熱顶頂种種带帶货貨邮郵价價绝絕绪緒飞飛鱼魚误誤区區给給谱譜颜顏气氣抠摳门門铁鐵闺閨没沒马馬赋賦闭閉环環颗顆对對赛賽运運营營销銷馈饋项項岗崗单單诉訴动動卖賣递遞车車卫衛间間业業红紅面麵饭飯萝蘿话話麦麥后後国國湾灣陆陸两兩会會领領导導显顯触觸载載夹夾档檔宽寬优優们們这這个個为為样樣么麼时時说說还還来來开開实實现現问問题題经經长長书書学學习習战戰场場应應该該让讓识識语語词詞汇彙观觀听聽见見买買钱錢银銀员員层層际際专專级級爱愛华華剧劇艺藝节節乐樂声聲响響灯燈辑輯帧幀仪儀扩擴鸡雞挂掛号號队隊肤膚综綜画畫汉漢宾賓馆館购購猕獼圆圓兰蘭柜櫃胶膠签簽证證驾駕驶駛医醫输輸纸紙楼樓简簡历歷职職报報复復逻邏计計揽攬牵牽划劃杀殺补補顿頓试試归歸异異释釋验驗弹彈贴貼键鍵续續壳殼条條众眾喷噴杠槓侠俠军軍锅鍋尔爾闹鬧窝窩儿兒块塊办辦达達叽嘰唠嘮谢謝亲親毕畢觉覺师師净淨读讀写寫镜鏡戏戲术術规規则則页頁浏瀏览覽盖蓋备備处處训訓练練参參统統产產余餘额額绑綁册冊昵暱称稱讯訊议議范範选選坏壞赖賴惯慣杂雜亚亞欧歐齐齊继繼厂廠广廣吗嗎饮飲烧燒鸭鴨汤湯锁鎖钥鑰钟鐘针針灭滅灵靈伤傷疗療药藥护護积積极極构構树樹绍紹团團帮幫贵貴资資赚賺费費贷貸测測满滿欢歡庆慶晒曬恋戀爷爺妈媽孙孫云雲边邊闪閃屿嶼岛島权權争爭罗羅杆桿阳陽宁寧浅淺温溫湿濕虚虛龙龍凤鳳荐薦钮鈕铃鈴阶階贝貝韩韓织織脑腦惊驚讲講悬懸跃躍狮獅侦偵东東";
+const S2T={}; for(let i=0;i<S2T_PAIRS.length;i+=2) S2T[S2T_PAIRS[i]]=S2T_PAIRS[i+1];
+const toTrad=s=>[...s].map(c=>S2T[c]||c).join("");
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+function scanOne(text,used,hits){
+  const lower=text.toLowerCase();
+  for(const e of DICT){
+    const key=e.t.toLowerCase();
+    let i=lower.indexOf(key);
+    while(i!==-1){
+      const end=i+key.length;
+      let skip=used.slice(i,end).some(Boolean);
+      if(!skip) for(const x of e.ex){const k=x.indexOf(e.t); if(k<0) continue; if(text.substr(i-k,x.length)===x){skip=true;break;}}
+      if(!skip){hits.push({i,end,e});for(let j=i;j<end;j++)used[j]=true;}
+      i=lower.indexOf(key,i+1);
+    }
+  }
+}
+function scan(text){
+  const hits=[],used=new Array(text.length).fill(false);
+  scanOne(text,used,hits);
+  const t2=toTrad(text); if(t2!==text) scanOne(t2,used,hits);
+  return hits.sort((a,b)=>a.i-b.i);
+}
+function card(e){
+  const g=e.lv==="g";
+  return `<div class="card ${g?"g":""}"><div class="top">
+    <span class="term">${esc(e.t)}</span><span class="arrow">→</span><span class="tw">${esc(e.tw.join("、"))}</span>
+    <span class="tags"><span class="badge ${g?"g":""}">${g?"看語境":"支語"}</span><span class="badge c">${esc(e.cat)}</span></span>
+  </div>${e.note?`<div class="note">${esc(e.note)}</div>`:""}</div>`;
+}
+
+const LINES={
+  bad:n=>pick([`抓到 <span class="c-red">${n}</span> 個入侵詞。<small>請它們出示護照。</small>`,`這句話有 <span class="c-red">${n}</span> 個詞，不是在這裡長大的。<small>沒關係，我們幫你遣返。</small>`,`<span class="c-red">${n}</span> 名嫌疑人當場落網。<small>證據如下。</small>`]),
+  gray:n=>`<span class="c-yellow">${n}</span> 個詞在灰色地帶游泳。<small>看你怎麼用，不一定有罪。</small>`,
+  ok:()=>pick([`<span class="c-green">乾淨。</span><small>這句話可以安心說出口。</small>`,`<span class="c-green">查無不法。</span><small>字典裡沒有找到支語。</small>`,`<span class="c-green">清白。</span><small>至少字典是這麼認為的。</small>`]),
+  tw:(w,t)=>`<span class="c-green">「${esc(w)}」是台灣說法。</span><small>你很好，別改。它的支語版本叫「${esc(t)}」，請保持距離。</small>`
+};
+
+let lastFixed="",lastKey="";
+function render(){
+  const text=$("inp").value,out=$("out");
+  $("tryWrap").classList.toggle("hide",!!text.trim());
+  if(!text.trim()){out.innerHTML=`<div class="empty"><div class="shapes"><i></i><i></i><i></i></div><p><b>還沒說話。</b>很好，沉默不是支語。</p></div>`;lastFixed="";lastKey="";return;}
+  const hits=scan(text);
+  const key=text+"|"+hits.length; const fresh=key!==lastKey; lastKey=key;
+  if(!hits.length){
+    const e=TWSET.get(toTrad(text.trim()));
+    out.innerHTML=`<div class="status ${fresh?"pop":""}">${e?LINES.tw(text.trim(),e.t):LINES.ok()}</div>`;
+    lastFixed=text;return;
+  }
+  let pv="",fx="",p=0;
+  for(const h of hits){
+    const w=esc(text.slice(h.i,h.end));
+    pv+=esc(text.slice(p,h.i))+`<mark class="${h.e.lv==="g"?"g":""}">${w}</mark>`;
+    fx+=esc(text.slice(p,h.i))+(h.e.lv==="s"?`<b>${esc(h.e.tw[0])}</b>`:w);
+    p=h.end;
+  }
+  pv+=esc(text.slice(p)); fx+=esc(text.slice(p));
+  lastFixed=hits.reduceRight((s,h)=>h.e.lv==="s"?s.slice(0,h.i)+h.e.tw[0]+s.slice(h.end):s,text);
+  const s=hits.filter(h=>h.e.lv==="s").length,g=hits.length-s;
+  const seen=new Set();
+  if(fresh||!out.dataset.line) out.dataset.line=s?LINES.bad(s):LINES.gray(g);
+  out.innerHTML=`<div class="status ${fresh?"pop":""}">${out.dataset.line}</div>
+    <div class="label">現場畫面</div><div class="box">${pv}</div>
+    ${s?`<div class="label">改過自新後</div><div class="box fixed"><span class="stamp">已糾正</span>${fx}</div>`:""}
+    <div class="label">${s?"罪狀":"可疑點"}</div>
+    <div class="cards">${hits.filter(h=>!seen.has(h.e.t)&&seen.add(h.e.t)).map(h=>card(h.e)).join("")}</div>`;
+}
+
+let hist=[];try{hist=JSON.parse(localStorage.getItem("zy_hist")||"[]")}catch(e){}
+function saveHist(t){t=t.trim();if(!t||t.length>40)return;hist=[t,...hist.filter(x=>x!==t)].slice(0,12);try{localStorage.setItem("zy_hist",JSON.stringify(hist))}catch(e){}drawHist();}
+function chipsTo(el,arr){el.innerHTML=arr.map(h=>`<button class="chip">${esc(h)}</button>`).join("");[...el.children].forEach((b,i)=>b.onclick=()=>{$("inp").value=arr[i];render();window.scrollTo({top:$("inp").getBoundingClientRect().top+scrollY-20,behavior:"smooth"});});}
+function drawHist(){$("histWrap").classList.toggle("hide",!hist.length);chipsTo($("hist"),hist);}
+drawHist();
+chipsTo($("try"),["視頻","质量很好","我立馬打車去地鐵站","水平線上的水平","這個博主好靠譜","社死現場","影片"]);
+
+let tm;$("inp").addEventListener("input",()=>{render();clearTimeout(tm);tm=setTimeout(()=>saveHist($("inp").value),1500);});
+$("clearBtn").onclick=()=>{$("inp").value="";render();$("inp").focus();};
+$("copyBtn").onclick=async()=>{const b=$("copyBtn");try{await navigator.clipboard.writeText(lastFixed||$("inp").value);b.textContent="複製好了";b.classList.add("done");}catch(e){b.textContent="瀏覽器不給複製";}setTimeout(()=>{b.textContent="複製乾淨版本";b.classList.remove("done");},1600);};
+
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));
+  $("v-check").classList.toggle("hide",b.dataset.v!=="check");
+  $("v-dict").classList.toggle("hide",b.dataset.v!=="dict");
+  if(b.dataset.v==="dict") drawDict();
+});
+
+const CATS=["全部",...new Set(DICT.map(e=>e.cat))];
+let cat="全部";
+$("cats").innerHTML=CATS.map(c=>`<button class="chip ${c===cat?"on":""}">${esc(c)}</button>`).join("");
+[...$("cats").children].forEach((b,i)=>b.onclick=()=>{cat=CATS[i];[...$("cats").children].forEach((x,j)=>x.classList.toggle("on",j===i));drawDict();});
+$("q").addEventListener("input",drawDict);
+const SORTED=[...DICT].sort((a,b)=>a.t.localeCompare(b.t,"zh-Hant"));
+function drawDict(){
+  const q=toTrad($("q").value.trim().toLowerCase());
+  const list=SORTED.filter(e=>(cat==="全部"||e.cat===cat)&&(!q||e.t.toLowerCase().includes(q)||e.tw.some(w=>w.toLowerCase().includes(q))));
+  $("dcount").innerHTML=list.length?`目前通緝 <span>${list.length}</span> 名`:`查無此人。<small style="font:400 14px 'Noto Sans TC';color:var(--soft)">可能是台灣說法，也可能還沒被抓到。</small>`;
+  $("dlist").innerHTML=list.map(card).join("");
+}
+$("tabn").textContent=DICT.length;
+render();
+</script>
+</body>
+</html>
