@@ -100,6 +100,12 @@ mark.g{background:var(--yellowbg);color:#8A6400;text-decoration:none;border-bott
 .chip:nth-child(5n+3):hover,.chip.on:nth-child(5n+3){background:var(--green);color:#fff}
 .chip:nth-child(5n+4):hover,.chip.on:nth-child(5n+4){background:var(--blue);color:#fff}
 .chip:nth-child(5n+5):hover,.chip.on:nth-child(5n+5){background:var(--pink)}
+.card.l::before{background:var(--green)}
+.card.l .term::after{display:none}
+.card.l .term{color:var(--green)}
+.badge.l{background:#fff;color:var(--green);border-color:var(--green)}
+.also{font-size:14px;color:var(--soft)}
+.also b{color:var(--ink);font-weight:700}
 .hchip{display:inline-flex;align-items:stretch;border:1.5px solid var(--ink);background:#fff}
 .hchip .chip{border:0}
 .hchip .del{font:inherit;font-size:15px;line-height:1;border:0;border-left:1.5px solid var(--ink);background:#fff;padding:0 9px;cursor:pointer;color:var(--soft)}
@@ -180,6 +186,7 @@ footer a{color:var(--blue)}
     <p><b>紅色｜支語</b>：台灣有固定說法，這個詞是中國用法。系統會直接幫你換掉。<br>
     <b>黃色｜看語境</b>：同一個詞，有的意思台灣通用，有的是中國用法。例如「水平線」沒事，「水平很高」要說「水準」。系統只提醒，不幫你改。<br>
     <b>放行規則</b>：台灣本來就這樣說的搭配會自動略過，例如「行政程序」「期中考」「選手表現」。<br>
+    <b>髒話也分</b>：「草泥馬」「傻逼」這類中國粗話標紅色；「幹你娘」「靠北」「北七」這類台語髒話會標成綠色的「台灣本土」，髒是髒了點，但不是支語。<br>
     <b>主權用語一律紅色</b>：例如「中國台灣」「台灣地區」。<br>
     <b>判斷依據</b>：看使用方式與脈絡，不只看字典有沒有收。</p>
   </details>
@@ -341,16 +348,16 @@ YYDS|超神、永遠的神|s|俚語|「永遠的神」的拼音縮寫
 套娃|巢狀、模仿|s|動詞|中國網路用語，指一層包一層
 誤區|迷思、錯誤觀念、盲點|s|名詞|中國的說法，台灣說「迷思」
 SB|白痴|s|髒話|中國粗話「傻逼」的縮寫|USB,usb,SBS
-傻逼|白痴|s|髒話|中國粗話，台灣說「白痴」
-牛逼|厲害|s|俚語|中國北方粗話，台灣說「厲害」
-牛B|厲害|s|俚語|中國北方粗話，台灣說「厲害」
+傻逼|白痴、北七|s|髒話|中國北方粗話，台灣說「白痴」「北七」
+牛逼|厲害|s|髒話|中國北方粗話，台灣說「厲害」
+牛B|厲害|s|髒話|中國北方粗話，台灣說「厲害」
 給力|很棒、很猛|s|俚語|中國網路流行語，台灣說「很棒」
 靠譜|可靠|s|俚語|中國北方口語，台灣說「可靠」
 走心|用心|s|俚語|中國網路用語，台灣說「用心」
 顏值|外貌、長相|s|俚語|中國網路用語，指外貌分數
 高大上|高級|s|俚語|「高端大氣上檔次」的簡稱
 接地氣|親民|s|俚語|中國流行語，台灣說「親民」
-懵逼|傻眼|s|俚語|中國網路粗話，台灣說「傻眼」
+懵逼|傻眼|s|髒話|中國網路粗話，台灣說「傻眼」
 忽悠|唬弄|s|俚語|中國東北方言，台灣說「唬弄」
 嘚瑟|臭屁|s|俚語|中國東北方言，台灣說「臭屁」
 摳門|小氣|s|俚語|中國北方口語，台灣說「小氣」
@@ -498,7 +505,7 @@ SB|白痴|s|髒話|中國粗話「傻逼」的縮寫|USB,usb,SBS
 甩鍋|推卸責任|s|俚語|中國網路用語，台灣說「推卸責任」
 背鍋|揹黑鍋|s|俚語|中國網路用語，台灣說「揹黑鍋」
 杠杠的|很棒|s|俚語|中國東北方言，台灣說「很棒」
-撕逼|互撕、吵架|s|俚語|中國網路粗話，台灣說「互撕」
+撕逼|互撕、吵架|s|髒話|中國網路粗話，台灣說「互撕」
 社死|丟臉、社會性死亡|s|俚語|中國網路用語，「社會性死亡」的簡稱
 凡爾賽|炫耀|s|俚語|中國網路用語，指假裝不經意地炫耀
 打call|應援|s|網路|中國追星用語，台灣說「應援」
@@ -702,7 +709,7 @@ PUA|情緒操控|g|俚語|中國網路借用的英文縮寫，台灣說「情緒
 狗糧|閃光|g|俚語|寵物飼料通用；看人放閃是中國用法|買狗糧,餵狗糧,狗糧品牌
 秀恩愛|放閃|g|俚語|中國的說法，台灣說「放閃」
 女漢子|男人婆|g|俚語|中國網路用語，台灣說「男人婆」
-屌絲|魯蛇|s|俚語|中國網路粗話，台灣說「魯蛇」
+屌絲|魯蛇|s|髒話|中國網路粗話，台灣說「魯蛇」
 土豪|有錢人、凱子|g|俚語|中國網路用語，指有錢又愛花錢的人
 高富帥|人生勝利組|s|俚語|中國網路用語，台灣說「人生勝利組」
 白富美|人生勝利組|s|俚語|中國網路用語，台灣說「人生勝利組」
@@ -1021,7 +1028,7 @@ B超|超音波|s|醫療|中國的說法，台灣說「超音波」
 家人們|各位朋友|g|網路|真的指家人通用；直播主叫觀眾是中國用法|我的家人們,和家人們,跟家人們,與家人們
 較真|認真|s|口語|中國北方口語，台灣說「認真」「計較」
 難頂|很難受、受不了|s|俚語|中國網路用語，指很難受
-裝逼|愛現、裝懂|s|俚語|中國網路粗話，台灣說「愛現」
+裝逼|愛現、裝懂|s|髒話|中國網路粗話，台灣說「愛現」
 魔性|洗腦|s|俚語|中國網路用語，指洗腦停不下來
 拉滿|做到滿|s|俚語|中國遊戲用語延伸，指做到最滿
 帶感|有感覺|s|俚語|中國網路用語，指很有感覺
@@ -1047,7 +1054,7 @@ B超|超音波|s|醫療|中國的說法，台灣說「超音波」
 分辨度|解析度|s|科技|中國說法，台灣叫「解析度」
 漢化|中文化|s|遊戲|中國遊戲用語，台灣說「中文化」
 拉黑|封鎖|s|網路|中國網路用語，台灣說「封鎖」
-臥槽|靠|s|髒話|中國粗話，台灣說「靠」
+臥槽|靠|s|髒話|「我肏」的諧音，中國網路粗話
 火鉗劉明|留名|s|網路|「火前留名」的諧音，中國網路用語
 評論區|留言區|s|網路|中國的說法，台灣說「留言區」
 有一說一|老實說|s|口語|中國網路用語，台灣說「老實說」
@@ -1075,10 +1082,62 @@ U1S1|老實說|s|網路|「有一說一」的拼音縮寫
 薅羊毛|撿便宜|s|生活|中國網路用語，指撿便宜、蹭優惠
 割韭菜|收割散戶|s|生活|中國網路用語，指收割散戶
 炒股|玩股票|s|生活|中國的說法，台灣說「玩股票」
-網貸|網路借貸|s|生活|中國的簡稱，台灣說「網路借貸」`;
+網貸|網路借貸|s|生活|中國的簡稱，台灣說「網路借貸」
+草泥馬|幹你娘|s|髒話|「肏你媽」的諧音，中國網民為了躲審查而造的詞
+尼瑪|你老師咧|s|髒話|「你媽」的諧音，中國網路粗話
+你大爺的|靠北|s|髒話|中國北方罵人話
+二逼|北七、白痴|s|髒話|中國北方粗話，指笨蛋
+二B|北七、白痴|s|髒話|「二逼」的縮寫
+逗比|白目、搞笑|s|髒話|中國網路用語，指愛搞笑的蠢人
+逼格|格調|s|髒話|中國網路用語，拿粗話字眼形容格調
+傻叉|白痴|s|髒話|「傻逼」的避諱寫法
+傻X|白痴|s|髒話|「傻逼」的避諱寫法
+煞筆|白痴|s|髒話|「傻逼」的諧音
+沙雕|北七、智障|g|髒話|罵人是「傻屌」的諧音；海灘「沙雕」藝術台灣通用|沙雕展,沙雕藝術,沙雕作品,沙雕季,沙雕節,堆沙雕
+碧池|賤人|s|髒話|英文 bitch 的中國音譯
+握草|靠|s|髒話|「我肏」的諧音
+日了狗|靠北|s|髒話|中國網路粗話，表示倒楣、傻眼
+狗日的|幹|s|髒話|中國北方粗話
+癟三|爛人|s|髒話|上海話，指無賴
+龜孫|混蛋|s|髒話|中國河南一帶的罵人話
+媽賣批|幹|s|髒話|四川話粗話
+MMP|幹|s|髒話|「媽賣批」的拼音縮寫
+CNM|幹你娘|s|髒話|「肏你媽」的拼音縮寫
+NMSL|你娘咧|s|髒話|「你媽死了」的拼音縮寫
+傻缺|白痴|s|髒話|中國北方粗話
+傻帽|白痴|s|髒話|北京話，指土氣又笨
+二貨|白痴、北七|s|髒話|中國北方口語，指傻瓜
+菜逼|菜鳥|s|髒話|中國遊戲圈粗話
+裝B|愛現|s|髒話|「裝逼」的縮寫
+滾犢子|滾開|s|髒話|中國東北方言
+艹|幹|s|髒話|中國網路用來代替「肏」的字
+幹你娘|台語髒話|l|髒話|台灣最常見的髒話，台語「姦恁娘」
+塞你娘|台語髒話|l|髒話|台語髒話，比「幹你娘」稍委婉
+靠北|抱怨、碎念|l|髒話|台語「哭爸」，原指像死了爸爸一樣哭鬧
+靠腰|抱怨、碎念|l|髒話|「靠北」的委婉說法|靠腰部
+靠夭|抱怨、碎念|l|髒話|「靠腰」的另一種寫法
+靠杯|抱怨、碎念|l|髒話|「靠北」的委婉說法
+哭夭|抱怨、吵鬧|l|髒話|台語，指吵鬧抱怨
+哭爸|抱怨、吵鬧|l|髒話|台語，指吵鬧抱怨|哭爸爸
+北七|白痴|l|髒話|台語「白痴」的諧音
+白目|不識相|l|髒話|台語，指搞不清楚狀況
+機掰|很討厭|l|髒話|台語髒話，形容人難搞
+雞掰|很討厭|l|髒話|台語「機掰」的另一種寫法
+雞歪|很討厭|l|髒話|台語「機掰」的另一種寫法
+林北|老子|l|髒話|台語「恁爸」，自稱老子
+恁爸|老子|l|髒話|台語「你爸」，自稱老子
+衝三小|做什麼啦|l|髒話|台語，不耐煩地問「在幹嘛」
+三小|什麼|l|髒話|台語「什麼」的粗俗說法|三小時,三小節,三小姐
+夭壽|要命|l|髒話|台語，原指短命，常用來表示驚嘆|夭壽骨
+白爛|耍賤|l|髒話|台灣口語，指故意耍笨亂來
+俗辣|膽小鬼|l|髒話|台語，指膽小沒種
+卒仔|膽小鬼|l|髒話|台語，指膽小沒種
+幹話|廢話|l|髒話|台灣口語，指沒營養的空話
+三八|輕浮、白目|l|髒話|台語，形容人輕浮|三八婦女節,三八節,三八線
+哇靠|驚嘆|l|髒話|台灣常見的驚嘆語，語氣粗俗`;
 const DICT = RAW.trim().split("\n").map(l=>{const [t,tw,lv,cat,note,ex]=l.split("|");return {t,tw:tw.split("、"),lv,cat,note:note||"",ex:(ex||"").split(",").filter(Boolean)}}).sort((a,b)=>b.t.length-a.t.length);
-const TWSET = new Map(); DICT.forEach(e=>e.tw.forEach(w=>{const k=w.replace(/（.*?）/g,"").trim(); if(!TWSET.has(k)) TWSET.set(k,e);}));
-const S2T_PAIRS="视視频頻质質链鏈录錄账賬户戶设設认認务務据據库庫网網络絡联聯软軟盘盤内內标標图圖组組码碼编編调調数數变變线線进進缓緩储儲适適摄攝头頭维維扫掃电電宝寶笔筆记記机機过過发發点點赞讚击擊关關转轉评評论論体體热熱顶頂种種带帶货貨邮郵价價绝絕绪緒飞飛鱼魚误誤区區给給谱譜颜顏气氣抠摳门門铁鐵闺閨没沒马馬赋賦闭閉环環颗顆对對赛賽运運营營销銷馈饋项項岗崗单單诉訴动動卖賣递遞车車卫衛间間业業红紅面麵饭飯萝蘿话話麦麥后後国國湾灣陆陸两兩会會领領导導显顯触觸载載夹夾档檔宽寬优優们們这這个個为為样樣么麼时時说說还還来來开開实實现現问問题題经經长長书書学學习習战戰场場应應该該让讓识識语語词詞汇彙观觀听聽见見买買钱錢银銀员員层層际際专專级級爱愛华華剧劇艺藝节節乐樂声聲响響灯燈辑輯帧幀仪儀扩擴鸡雞挂掛号號队隊肤膚综綜画畫汉漢宾賓馆館购購猕獼圆圓兰蘭柜櫃胶膠签簽证證驾駕驶駛医醫输輸纸紙楼樓简簡历歷职職报報复復逻邏计計揽攬牵牽划劃杀殺补補顿頓试試归歸异異释釋验驗弹彈贴貼键鍵续續壳殼条條众眾喷噴杠槓侠俠军軍锅鍋尔爾闹鬧窝窩儿兒块塊办辦达達叽嘰唠嘮谢謝亲親毕畢觉覺师師净淨读讀写寫镜鏡戏戲术術规規则則页頁浏瀏览覽盖蓋备備处處训訓练練参參统統产產余餘额額绑綁册冊昵暱称稱讯訊议議范範选選坏壞赖賴惯慣杂雜亚亞欧歐齐齊继繼厂廠广廣吗嗎饮飲烧燒鸭鴨汤湯锁鎖钥鑰钟鐘针針灭滅灵靈伤傷疗療药藥护護积積极極构構树樹绍紹团團帮幫贵貴资資赚賺费費贷貸测測满滿欢歡庆慶晒曬恋戀爷爺妈媽孙孫云雲边邊闪閃屿嶼岛島权權争爭罗羅杆桿阳陽宁寧浅淺温溫湿濕虚虛龙龍凤鳳荐薦钮鈕铃鈴阶階贝貝韩韓织織脑腦惊驚讲講悬懸跃躍狮獅侦偵连連涨漲阴陰怼懟脱脫粮糧丝絲帅帥穷窮袭襲赢贏枪槍减減骑騎贼賊哒噠绷繃泪淚妇婦圣聖黄黃冲沖锋鋒绒絨裤褲栏欄译譯制製终終奖獎属屬装裝烟煙飘飄洁潔约約顺順桩樁创創墙牆驰馳伟偉钢鋼绿綠猪豬玛瑪丽麗乔喬伦倫鲁魯萨薩乌烏兹茲别別纳納韦韋莱萊叶葉奥奧噜嚕猫貓腻膩预預较較钳鉗刘劉卧臥课課捡撿弯彎东東";
+const TWSET = new Map(); DICT.filter(e=>e.lv!=="l").forEach(e=>e.tw.forEach(w=>{const k=w.replace(/（.*?）/g,"").trim(); if(!TWSET.has(k)) TWSET.set(k,e);}));
+const S2T_PAIRS="龟龜瘪癟犊犢视視频頻质質链鏈录錄账賬户戶设設认認务務据據库庫网網络絡联聯软軟盘盤内內标標图圖组組码碼编編调調数數变變线線进進缓緩储儲适適摄攝头頭维維扫掃电電宝寶笔筆记記机機过過发發点點赞讚击擊关關转轉评評论論体體热熱顶頂种種带帶货貨邮郵价價绝絕绪緒飞飛鱼魚误誤区區给給谱譜颜顏气氣抠摳门門铁鐵闺閨没沒马馬赋賦闭閉环環颗顆对對赛賽运運营營销銷馈饋项項岗崗单單诉訴动動卖賣递遞车車卫衛间間业業红紅面麵饭飯萝蘿话話麦麥后後国國湾灣陆陸两兩会會领領导導显顯触觸载載夹夾档檔宽寬优優们們这這个個为為样樣么麼时時说說还還来來开開实實现現问問题題经經长長书書学學习習战戰场場应應该該让讓识識语語词詞汇彙观觀听聽见見买買钱錢银銀员員层層际際专專级級爱愛华華剧劇艺藝节節乐樂声聲响響灯燈辑輯帧幀仪儀扩擴鸡雞挂掛号號队隊肤膚综綜画畫汉漢宾賓馆館购購猕獼圆圓兰蘭柜櫃胶膠签簽证證驾駕驶駛医醫输輸纸紙楼樓简簡历歷职職报報复復逻邏计計揽攬牵牽划劃杀殺补補顿頓试試归歸异異释釋验驗弹彈贴貼键鍵续續壳殼条條众眾喷噴杠槓侠俠军軍锅鍋尔爾闹鬧窝窩儿兒块塊办辦达達叽嘰唠嘮谢謝亲親毕畢觉覺师師净淨读讀写寫镜鏡戏戲术術规規则則页頁浏瀏览覽盖蓋备備处處训訓练練参參统統产產余餘额額绑綁册冊昵暱称稱讯訊议議范範选選坏壞赖賴惯慣杂雜亚亞欧歐齐齊继繼厂廠广廣吗嗎饮飲烧燒鸭鴨汤湯锁鎖钥鑰钟鐘针針灭滅灵靈伤傷疗療药藥护護积積极極构構树樹绍紹团團帮幫贵貴资資赚賺费費贷貸测測满滿欢歡庆慶晒曬恋戀爷爺妈媽孙孫云雲边邊闪閃屿嶼岛島权權争爭罗羅杆桿阳陽宁寧浅淺温溫湿濕虚虛龙龍凤鳳荐薦钮鈕铃鈴阶階贝貝韩韓织織脑腦惊驚讲講悬懸跃躍狮獅侦偵连連涨漲阴陰怼懟脱脫粮糧丝絲帅帥穷窮袭襲赢贏枪槍减減骑騎贼賊哒噠绷繃泪淚妇婦圣聖黄黃冲沖锋鋒绒絨裤褲栏欄译譯制製终終奖獎属屬装裝烟煙飘飄洁潔约約顺順桩樁创創墙牆驰馳伟偉钢鋼绿綠猪豬玛瑪丽麗乔喬伦倫鲁魯萨薩乌烏兹茲别別纳納韦韋莱萊叶葉奥奧噜嚕猫貓腻膩预預较較钳鉗刘劉卧臥课課捡撿弯彎东東";
 const S2T={}; for(let i=0;i<S2T_PAIRS.length;i+=2) S2T[S2T_PAIRS[i]]=S2T_PAIRS[i+1];
 const toTrad=s=>[...s].map(c=>S2T[c]||c).join("");
 const $=id=>document.getElementById(id);
@@ -1106,6 +1165,10 @@ function scan(text){
   return hits.sort((a,b)=>a.i-b.i);
 }
 function card(e){
+  if(e.lv==="l") return `<div class="card l"><div class="top">
+    <span class="term">${esc(e.t)}</span><span class="also">意思是 <b>${esc(e.tw.join("、"))}</b></span>
+    <span class="tags"><span class="badge l">台灣本土</span><span class="badge c">${esc(e.cat)}</span></span>
+  </div>${e.note?`<div class="note">${esc(e.note)}</div>`:""}</div>`;
   const g=e.lv==="g";
   return `<div class="card ${g?"g":""}"><div class="top">
     <span class="term">${esc(e.t)}</span><span class="arrow">→</span><span class="tw">${esc(e.tw.join("、"))}</span>
@@ -1116,6 +1179,7 @@ function card(e){
 const LINES={
   bad:n=>pick([`抓到 <span class="c-red">${n}</span> 個入侵詞。<small>請它們出示護照。</small>`,`這句話有 <span class="c-red">${n}</span> 個詞，不是在這裡長大的。<small>沒關係，我們幫你遣返。</small>`,`<span class="c-red">${n}</span> 名嫌疑人當場落網。<small>證據如下。</small>`]),
   gray:n=>`<span class="c-yellow">${n}</span> 個詞在灰色地帶游泳。<small>看你怎麼用，不一定有罪。</small>`,
+  local:()=>`<span class="c-green">道地台灣貨。</span><small>髒是髒了點，但不是支語。</small>`,
   ok:()=>pick([`<span class="c-green">乾淨。</span><small>這句話可以安心說出口。</small>`,`<span class="c-green">查無不法。</span><small>字典裡沒有找到支語。</small>`,`<span class="c-green">清白。</span><small>至少字典是這麼認為的。</small>`]),
   tw:(w,t)=>`<span class="c-green">「${esc(w)}」是台灣說法。</span><small>你很好，別改。它的支語版本叫「${esc(t)}」，請保持距離。</small>`
 };
@@ -1125,11 +1189,13 @@ function render(){
   const text=$("inp").value,out=$("out");
   $("tryWrap").classList.toggle("hide",!!text.trim());
   if(!text.trim()){out.innerHTML=`<div class="empty"><div class="shapes"><i></i><i></i><i></i></div><p><b>還沒說話。</b>很好，沉默不是支語。</p></div>`;lastFixed="";lastKey="";return;}
-  const hits=scan(text);
+  const all=scan(text), hits=all.filter(h=>h.e.lv!=="l"), local=all.filter(h=>h.e.lv==="l");
+  const lseen=new Set();
+  const localHtml=local.length?`<div class="label">台灣本土，不是支語</div><div class="cards">${local.filter(h=>!lseen.has(h.e.t)&&lseen.add(h.e.t)).map(h=>card(h.e)).join("")}</div>`:"";
   const key=text+"|"+hits.length; const fresh=key!==lastKey; lastKey=key;
   if(!hits.length){
     const e=TWSET.get(toTrad(text.trim()));
-    out.innerHTML=`<div class="status ${fresh?"pop":""}">${e?LINES.tw(text.trim(),e.t):LINES.ok()}</div>`;
+    out.innerHTML=`<div class="status ${fresh?"pop":""}">${e?LINES.tw(text.trim(),e.t):local.length?LINES.local():LINES.ok()}</div>${localHtml}`;
     lastFixed=text;return;
   }
   let pv="",fx="",p=0;
@@ -1148,7 +1214,7 @@ function render(){
     <div class="label">現場畫面</div><div class="box">${pv}</div>
     ${s?`<div class="label">改過自新後</div><div class="box fixed"><span class="stamp">已糾正</span>${fx}</div>`:""}
     <div class="label">${s?"罪狀":"可疑點"}</div>
-    <div class="cards">${hits.filter(h=>!seen.has(h.e.t)&&seen.add(h.e.t)).map(h=>card(h.e)).join("")}</div>`;
+    <div class="cards">${hits.filter(h=>!seen.has(h.e.t)&&seen.add(h.e.t)).map(h=>card(h.e)).join("")}</div>${localHtml}`;
 }
 
 let hist=[];try{hist=JSON.parse(localStorage.getItem("zy_hist")||"[]")}catch(e){}
@@ -1188,7 +1254,7 @@ function drawDict(){
   $("dcount").innerHTML=list.length?`目前通緝 <span>${list.length}</span> 名`:`查無此人。<small style="font:400 14px 'Noto Sans TC';color:var(--soft)">可能是台灣說法，也可能還沒被抓到。</small>`;
   $("dlist").innerHTML=list.map(card).join("");
 }
-$("tabn").textContent=DICT.length;
+$("tabn").textContent=DICT.filter(e=>e.lv!=="l").length;
 render();
 </script>
 </body>
