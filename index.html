@@ -136,6 +136,10 @@ details b{color:var(--ink)}
 footer{margin-top:36px;padding-top:18px;border-top:2px solid var(--ink);font-size:12px;color:var(--soft)}
 footer .joke{font-family:"Noto Serif TC",serif;font-weight:900;font-size:16px;color:var(--ink);margin-bottom:8px}
 footer a{color:var(--blue)}
+.upd{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:700;color:var(--ink);margin:0 0 14px}
+.upd-d{font-weight:400;color:var(--soft)}
+.dot-live{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--greenbg)}
+
 .src{margin:6px 0 14px}
 .src-h{font-weight:700;color:var(--ink);font-size:13px;margin-bottom:4px;letter-spacing:.1em}
 .src ol{margin:0;padding-left:20px;line-height:1.8}
@@ -193,6 +197,7 @@ footer a{color:var(--blue)}
 
   <footer>
     <div class="joke">本站不含任何視頻、屏幕或質量問題，也沒有優化空間。</div>
+    <div class="upd"><span class="dot-live"></span>網站持續更新中<span class="upd-d">最後更新：2026 年 11 月 17 日</span></div>
     <div class="src">
       <div class="src-h">資料出處</div>
       <ol>
@@ -1180,7 +1185,7 @@ const LINES={
   bad:n=>pick([`抓到 <span class="c-red">${n}</span> 個入侵詞。<small>請它們出示護照。</small>`,`這句話有 <span class="c-red">${n}</span> 個詞，不是在這裡長大的。<small>沒關係，我們幫你遣返。</small>`,`<span class="c-red">${n}</span> 名嫌疑人當場落網。<small>證據如下。</small>`]),
   gray:n=>`<span class="c-yellow">${n}</span> 個詞在灰色地帶游泳。<small>看你怎麼用，不一定有罪。</small>`,
   local:()=>`<span class="c-green">道地台灣貨。</span><small>髒是髒了點，但不是支語。</small>`,
-  ok:()=>pick([`<span class="c-green">乾淨。</span><small>這句話可以安心說出口。</small>`,`<span class="c-green">查無不法。</span><small>字典裡沒有找到支語。</small>`,`<span class="c-green">清白。</span><small>至少字典是這麼認為的。</small>`]),
+  ok:()=>`<span class="c-green">查無不法。</span><small>字典裡沒有找到支語。</small>`,
   tw:(w,t)=>`<span class="c-green">「${esc(w)}」是台灣說法。</span><small>你很好，別改。它的支語版本叫「${esc(t)}」，請保持距離。</small>`
 };
 
